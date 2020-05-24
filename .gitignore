@@ -1,0 +1,8 @@
+bin/*.ilk
+bin/*.pdb
+bin/*.exe
+cpp_try/.vs/
+cpp_try/cpp_try.VC.*
+cpp_try/app1/x64/
+cpp_try/app1/app1.vcxproj.user
+
