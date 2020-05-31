@@ -1,4 +1,4 @@
-﻿#include <iostream>
+﻿#include <stdio.h>
 #include "ModuleA.h"
 
 namespace XX
@@ -14,6 +14,6 @@ namespace XX
 
 	void ModuleA::Fun()
 	{
-		printf_s("ModuleA.Value:%d\n", m_Value);
+		printf("ModuleA.Value:%d\n", m_Value);
 	}
 }
