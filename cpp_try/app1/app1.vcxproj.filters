@@ -2,5 +2,18 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Module\ModuleA.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Module">
+      <UniqueIdentifier>{0e8053b5-9df2-44b0-91a0-4aed4c70bafc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Module\ModuleA.h">
+      <Filter>Module</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

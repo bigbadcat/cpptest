@@ -1,7 +1,11 @@
-#include "stdio.h"
+#include <iostream>
+#include "Module/ModuleA.h"
+using namespace XX;
 
 int main()
 {
-	printf("Hello World!\n");
+	ModuleA m(2);
+	m.Fun();
+	system("pause");
 	return 0;
 }

@@ -1,5 +1,5 @@
 try step:
-1.hello world
+1.hello world -ok
 2.class
 3.lib
 4.xml
