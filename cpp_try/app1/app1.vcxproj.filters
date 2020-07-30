@@ -5,15 +5,34 @@
     <ClCompile Include="Module\ModuleA.cpp">
       <Filter>Module</Filter>
     </ClCompile>
+    <ClCompile Include="Module\ModuleB\ModuleB.cpp">
+      <Filter>Module\ModuleB</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\DataUtil.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Module">
       <UniqueIdentifier>{0e8053b5-9df2-44b0-91a0-4aed4c70bafc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Module\ModuleB">
+      <UniqueIdentifier>{96f95556-2888-4363-a5fc-2a1b0c771bd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{dd5f33bd-487f-4901-9a3b-541de7ed9a37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module\ModuleA.h">
       <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="Module\ModuleB\ModuleB.h">
+      <Filter>Module\ModuleB</Filter>
+    </ClInclude>
+    <ClInclude Include="Macro.h" />
+    <ClInclude Include="Util\DataUtil.h">
+      <Filter>Util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
