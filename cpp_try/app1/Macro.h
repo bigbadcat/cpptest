@@ -9,8 +9,8 @@ typedef short Int16;
 typedef unsigned short UInt16;
 typedef int Int32;
 typedef unsigned int UInt32;
-typedef __int64 Int64;
-typedef unsigned __int64 UInt64;
+typedef long long Int64;
+typedef unsigned long long UInt64;
 
 #define SAFE_DELETE(p) if (p!=NULL){delete(p); p=NULL;}
 #define SAFE_DELETE_ARRAY(p) if (p!=NULL){delete[](p); p=NULL;}

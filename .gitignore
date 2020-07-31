@@ -3,7 +3,7 @@ bin/*.pdb
 bin/*.exe
 cpp_try/.vs/
 cpp_try/cpp_try.VC.*
-cpp_try/app1/*.o
+cpp_try/app1/obj/
 cpp_try/app1/app1
 cpp_try/app1/x64/
 cpp_try/app1/app1.vcxproj.user
