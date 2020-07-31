@@ -1,4 +1,4 @@
-﻿#ifndef __ModuleA_h__
+#ifndef __ModuleA_h__
 #define __ModuleA_h__
 
 namespace XX

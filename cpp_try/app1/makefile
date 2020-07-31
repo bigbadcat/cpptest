@@ -16,24 +16,14 @@ OBJS = $(addprefix $(OBJ_DIR)/,$(subst .cpp,.o,$(SRC_PATH)))
 MAKE_OBJECT_DIR := $(shell mkdir -p $(OBJ_DIR) $(OBJ_PATH))
 
 $(TARGET) : $(OBJS)
-	@echo "Linking "$(TARGET)
+	@echo "Linking... "
 	g++ -o $@ $(OBJS) $(INCLUDE_PATH)
 
-#obj/main.o : main.cpp obj/main.cpp.d
-#	@echo "Compling "$^
-#	g++ -o $@ -c $< $(INCLUDE_PATH)
-
 $(OBJS) : $(OBJ_DIR)/%.o : %.cpp $(OBJ_DIR)/%.cpp.d
-	@echo "Compling "$^
 	g++ -o $@ -c $< $(INCLUDE_PATH)i
-
-#%.o: %.cpp %.cpp.d
-#	@echo "Compling "$^
-#	g++ -o $@ -c $< $(INCLUDE_PATH)
 
 DEPS = $(OBJS:.o=.cpp.d)
 $(DEPS) : $(OBJ_DIR)/%.cpp.d : %.cpp
-	@echo "Build depend "$<
 	g++ $< -MM $(INCLUDE_PATH) > $(OBJ_DIR)/$<.d
 
 test:
@@ -46,3 +36,4 @@ test:
 clean:
 	@rm -rf ./obj
 	@rm -rf $(TARGET)
+	@echo "clean over"
