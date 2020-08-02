@@ -30,7 +30,6 @@
     <ClInclude Include="Module\ModuleB\ModuleB.h">
       <Filter>Module\ModuleB</Filter>
     </ClInclude>
-    <ClInclude Include="Macro.h" />
     <ClInclude Include="Util\DataUtil.h">
       <Filter>Util</Filter>
     </ClInclude>

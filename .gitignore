@@ -1,10 +1,14 @@
 bin/*.ilk
 bin/*.pdb
 bin/*.exe
+cpp_try/x64/
 cpp_try/.vs/
 cpp_try/cpp_try.VC.*
-cpp_try/app1/obj/
 cpp_try/app1/app1
+cpp_try/app1/obj/
 cpp_try/app1/x64/
 cpp_try/app1/app1.vcxproj.user
+cpp_try/common/obj/
+cpp_try/common/x64/
+cpp_try/common/common.vcxproj.user
 

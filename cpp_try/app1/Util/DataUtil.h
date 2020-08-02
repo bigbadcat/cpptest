@@ -11,7 +11,7 @@
 #ifndef __DataUtil_h__
 #define __DataUtil_h__
 
-#include "../Macro.h"
+#include <Macro.h>
 #include <string>
 using namespace std;
 

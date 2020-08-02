@@ -1,7 +1,7 @@
 ﻿#ifndef __ModuleB_h__
 #define __ModuleB_h__
 
-#include "../../Macro.h"
+#include <Macro.h>
 
 namespace XX
 {
