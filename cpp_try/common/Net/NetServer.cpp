@@ -12,6 +12,7 @@
 #include "../Macro.h"
 #include <iostream>
 #include <string>
+#include <stdio.h>
 #include <assert.h>
 
 namespace Net

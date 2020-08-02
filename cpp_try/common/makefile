@@ -1,14 +1,12 @@
 
 
-TARGET = app1
+TARGET = libcommon.a
 TARGET_PATH = ../bin
 
-INCLUDE = ../common
+INCLUDE = Net
 INCLUDE_PATH = $(addprefix -I,$(INCLUDE))
-LIB_NAME = -lcommon
-LIB_PATH = -L../common
 
-SRC = Module:Module/ModuleB:Util
+SRC = Net
 SRC_PATH = $(wildcard *.cpp)
 SRC_PATH += $(foreach dir, $(subst :, ,$(SRC)), $(wildcard $(dir)/*.cpp))
 
@@ -19,7 +17,7 @@ MAKE_OBJECT_DIR := $(shell mkdir -p $(OBJ_DIR) $(OBJ_PATH))
 
 $(TARGET) : $(OBJS)
 	@echo "Linking... "
-	g++ -o $@ $(OBJS) $(INCLUDE_PATH) $(LIB_NAME) $(LIB_PATH)
+	ar -r $@ $(OBJS)
 
 $(OBJS) : $(OBJ_DIR)/%.o : %.cpp $(OBJ_DIR)/%.cpp.d
 	g++ -o $@ -c $< $(INCLUDE_PATH)
@@ -27,13 +25,6 @@ $(OBJS) : $(OBJ_DIR)/%.o : %.cpp $(OBJ_DIR)/%.cpp.d
 DEPS = $(OBJS:.o=.cpp.d)
 $(DEPS) : $(OBJ_DIR)/%.cpp.d : %.cpp
 	g++ $< -MM $(INCLUDE_PATH) > $(OBJ_DIR)/$<.d
-
-test:
-	@echo $(SRC_PATH)
-	@echo $(OBJ_PATH)
-	@echo $(OBJS)
-	@echo $(DEPS)
-
 
 clean:
 	@rm -rf ./obj
