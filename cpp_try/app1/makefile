@@ -1,12 +1,14 @@
 
 
 TARGET = app1
-TARGET_PATH = ../bin
+TARGET_PATH = ../../bin
+MACROS = -D NDEBUG
 
 INCLUDE = ../common
 INCLUDE_PATH = $(addprefix -I,$(INCLUDE))
 LIB_NAME = -lcommon
 LIB_PATH = -L../common
+LIB_DEP = ../common/libcommon.a
 
 SRC = Module:Module/ModuleB:Util
 SRC_PATH = $(wildcard *.cpp)
@@ -17,12 +19,12 @@ OBJ_PATH = $(addprefix $(OBJ_DIR)/, $(subst :, , $(SRC)))
 OBJS = $(addprefix $(OBJ_DIR)/,$(subst .cpp,.o,$(SRC_PATH)))
 MAKE_OBJECT_DIR := $(shell mkdir -p $(OBJ_DIR) $(OBJ_PATH))
 
-$(TARGET) : $(OBJS)
+$(TARGET_PATH)/$(TARGET) : $(OBJS) $(LIB_DEP) 
 	@echo "Linking... "
 	g++ -o $@ $(OBJS) $(INCLUDE_PATH) $(LIB_NAME) $(LIB_PATH)
 
 $(OBJS) : $(OBJ_DIR)/%.o : %.cpp $(OBJ_DIR)/%.cpp.d
-	g++ -o $@ -c $< $(INCLUDE_PATH)
+	g++ -o $@ -c $< $(INCLUDE_PATH) $(MACROS)
 
 DEPS = $(OBJS:.o=.cpp.d)
 $(DEPS) : $(OBJ_DIR)/%.cpp.d : %.cpp
@@ -37,5 +39,5 @@ test:
 
 clean:
 	@rm -rf ./obj
-	@rm -rf $(TARGET)
+	@rm -rf $(TARGET_PATH)/$(TARGET)
 	@echo "clean over"

@@ -1,6 +1,7 @@
 bin/*.ilk
 bin/*.pdb
 bin/*.exe
+bin/app1
 cpp_try/x64/
 cpp_try/.vs/
 cpp_try/cpp_try.VC.*

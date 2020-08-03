@@ -1,12 +1,12 @@
 
 
 TARGET = libcommon.a
-TARGET_PATH = ../bin
+MACROS = -D NDEBUG
 
 INCLUDE = Net
 INCLUDE_PATH = $(addprefix -I,$(INCLUDE))
 
-SRC = Net
+SRC = Net:tinyxml2
 SRC_PATH = $(wildcard *.cpp)
 SRC_PATH += $(foreach dir, $(subst :, ,$(SRC)), $(wildcard $(dir)/*.cpp))
 
@@ -20,7 +20,7 @@ $(TARGET) : $(OBJS)
 	ar -r $@ $(OBJS)
 
 $(OBJS) : $(OBJ_DIR)/%.o : %.cpp $(OBJ_DIR)/%.cpp.d
-	g++ -o $@ -c $< $(INCLUDE_PATH)
+	g++ -o $@ -c $< $(INCLUDE_PATH) $(MACROS)
 
 DEPS = $(OBJS:.o=.cpp.d)
 $(DEPS) : $(OBJ_DIR)/%.cpp.d : %.cpp
