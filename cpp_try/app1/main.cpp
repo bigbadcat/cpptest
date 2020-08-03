@@ -8,6 +8,7 @@ using namespace XX;
 int main()
 {
 	NetServer net;
+	net.Init();
 	net.Start(30);
 
 	ModuleA ma(2);

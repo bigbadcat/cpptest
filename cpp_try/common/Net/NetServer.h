@@ -21,6 +21,8 @@ namespace Net
 		NetServer();
 		~NetServer();
 
+		void Init();
+
 		//启动网络模块。port:监听的端口号。
 		void Start(int port);
 

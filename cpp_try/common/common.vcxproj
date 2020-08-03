@@ -21,9 +21,11 @@
   <ItemGroup>
     <ClInclude Include="Macro.h" />
     <ClInclude Include="Net\NetServer.h" />
+    <ClInclude Include="tinyxml2\tinyxml2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Net\NetServer.cpp" />
+    <ClCompile Include="tinyxml2\tinyxml2.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{92F82D68-2BFF-485D-80AF-ADF5C58ABEBC}</ProjectGuid>

@@ -4,16 +4,25 @@
     <Filter Include="Net">
       <UniqueIdentifier>{41f82e89-2024-480c-b1c1-b50b751a2eaa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tinyxml2">
+      <UniqueIdentifier>{43d91504-0b10-4554-8aa1-18db4462338f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Macro.h" />
     <ClInclude Include="Net\NetServer.h">
       <Filter>Net</Filter>
     </ClInclude>
+    <ClInclude Include="tinyxml2\tinyxml2.h">
+      <Filter>tinyxml2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Net\NetServer.cpp">
       <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml2\tinyxml2.cpp">
+      <Filter>tinyxml2</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StartSetting>
+	<DataBase>
+		<host>localhost</host>
+		<user>root</user>
+		<pwd>1234</pwd>
+		<name>xx004</name>
+		<port>3306</port>
+	</DataBase>
+	<Master>
+		<port>8081</port>
+	</Master>
+</StartSetting>
