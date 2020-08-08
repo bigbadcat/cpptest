@@ -6,7 +6,7 @@ MACROS = -D NDEBUG
 
 INCLUDE = ../common
 INCLUDE_PATH = $(addprefix -I,$(INCLUDE))
-LIB_NAME = -lcommon
+LIB_NAME = -lcommon -llua -ldl
 LIB_PATH = -L../common
 LIB_DEP = ../common/libcommon.a
 
