@@ -129,12 +129,12 @@ namespace XX
 		lua_pop(L, 1);
 	}
 
-	__int64 LuaWrap::ReadLong(lua_State *L, char *name)
+	Int64 LuaWrap::ReadLong(lua_State *L, char *name)
 	{
-		return (__int64)ReadDouble(L, name);
+		return (Int64)ReadDouble(L, name);
 	}
 
-	void LuaWrap::ReadLongArray(lua_State *L, char *name, vector<__int64> &v)
+	void LuaWrap::ReadLongArray(lua_State *L, char *name, vector<Int64> &v)
 	{
 		v.clear();
 		lua_pushstring(L, name);
@@ -143,7 +143,7 @@ namespace XX
 		lua_pushnil(L);
 		while (lua_next(L, -2))		//堆栈状态 -1:value -2:key -3:array(table)
 		{
-			__int64 value = (__int64)lua_tonumber(L, -1);
+			Int64 value = (Int64)lua_tonumber(L, -1);
 			v.push_back(value);
 			lua_pop(L, 1);
 		}

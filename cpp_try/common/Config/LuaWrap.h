@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <assert.h>
+#include "../Macro.h"
 using namespace std;
 
 struct lua_State;
@@ -57,8 +58,8 @@ namespace XX
 		static int ReadInt(lua_State *L, char *name);
 		static void ReadIntArray(lua_State *L, char *name, vector<int> &v);
 
-		static __int64 ReadLong(lua_State *L, char *name);
-		static void ReadLongArray(lua_State *L, char *name, vector<__int64> &v);
+		static Int64 ReadLong(lua_State *L, char *name);
+		static void ReadLongArray(lua_State *L, char *name, vector<Int64> &v);
 
 		static float ReadFloat(lua_State *L, char *name);
 		static void ReadFloatArray(lua_State *L, char *name, vector<float> &v);
