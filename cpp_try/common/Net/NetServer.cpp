@@ -10,12 +10,14 @@
 
 #include "NetServer.h"
 #include "../Macro.h"
+#include "../Config/LuaWrap.h"
 #include "../tinyxml2/tinyxml2.h"
 #include <iostream>
 #include <string>
 #include <stdio.h>
 #include <assert.h>
 using namespace std;
+using namespace XX;
 
 namespace Net
 {
@@ -68,11 +70,13 @@ namespace Net
 	void NetServer::Start(int port)
 	{
 		m_Port = port;
+		LuaWrap::GetLuaState();
 		::printf("NetServer::Start port:%d\n", port);
 	}
 
 	void NetServer::Stop()
 	{
 		::printf("NetServer::Stop\n");
+		LuaWrap::ReleaseLua();
 	}
 }
