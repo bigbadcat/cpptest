@@ -77,7 +77,7 @@ namespace Net
 		LuaWrap::GetLuaState();
 		::printf("NetServer::Start port:%d\n", port);
 
-		char *sql = "select * from tb_server where id = 10001";
+		const char *sql = "select * from tb_server where id = 10001";
 		auto_ptr<MySQLResult> result = m_MySQL->Query(sql);
 		if (result->GetRecord())
 		{

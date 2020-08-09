@@ -3,6 +3,12 @@
 
 #include <string>
 
+
+#ifndef WIN32
+     #define _atoi64(val)     strtoll(val, NULL, 10)
+#endif
+
+
 typedef unsigned char Byte;
 typedef char SByte;
 typedef short Int16;

@@ -1,12 +1,13 @@
 
 
 TARGET = libcommon.a
+FLAGS = -std=c++11
 MACROS = -D NDEBUG
 
-INCLUDE = Net ../third_part/lua-5.3.4/include
+INCLUDE = Net ../third_part/lua-5.3.4/include ../third_part/MySQL5.5/include
 INCLUDE_PATH = $(addprefix -I,$(INCLUDE))
 
-SRC = Net:tinyxml2:Config
+SRC = Net:tinyxml2:Config:MySQL
 SRC_PATH = $(wildcard *.cpp)
 SRC_PATH += $(foreach dir, $(subst :, ,$(SRC)), $(wildcard $(dir)/*.cpp))
 
@@ -20,11 +21,11 @@ $(TARGET) : $(OBJS)
 	ar -r $@ $(OBJS)
 
 $(OBJS) : $(OBJ_DIR)/%.o : %.cpp $(OBJ_DIR)/%.cpp.d
-	g++ -o $@ -c $< $(INCLUDE_PATH) $(MACROS)
+	g++ $(FLAGS) -o $@ -c $< $(INCLUDE_PATH) $(MACROS)
 
 DEPS = $(OBJS:.o=.cpp.d)
 $(DEPS) : $(OBJ_DIR)/%.cpp.d : %.cpp
-	g++ $< -MM $(INCLUDE_PATH) > $(OBJ_DIR)/$<.d
+	g++ $(FLAGS) $< -MM $(INCLUDE_PATH) > $(OBJ_DIR)/$<.d
 
 clean:
 	@rm -rf ./obj

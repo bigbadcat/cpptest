@@ -12,7 +12,9 @@
 #define __MySQLWrap_h__
 
 #include <string>
+#if defined(WIN)
 #include <WinSock2.h>
+#endif
 #include <mysql.h>
 #include <iostream>
 #include <memory>

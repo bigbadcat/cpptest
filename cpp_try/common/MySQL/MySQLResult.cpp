@@ -9,7 +9,9 @@
 *******************************************************/
 
 #include "MySQLResult.h"
+#if defined(WIN)
 #include <WinSock2.h>
+#endif
 #include <mysql.h>
 #include <assert.h>
 #include <iostream>
