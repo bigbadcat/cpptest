@@ -11,6 +11,7 @@
 #include "NetServer.h"
 #include "../Macro.h"
 #include "../Config/LuaWrap.h"
+#include "../MySQL/MySQLWrap.h"
 #include "../tinyxml2/tinyxml2.h"
 #include <iostream>
 #include <string>
@@ -41,12 +42,13 @@ namespace Net
 		return string();
 	}
 
-	NetServer::NetServer() : m_Port(0)
+	NetServer::NetServer() : m_Port(0), m_MySQL(new MySQLWrap())
 	{
 	}
 
 	NetServer::~NetServer()
 	{
+		SAFE_DELETE(m_MySQL);
 	}
 
 	void NetServer::Init()
@@ -65,6 +67,8 @@ namespace Net
 				::printf("Master port:%d\n", mport);
 			}
 		}
+
+		m_MySQL->Init("110.43.46.109", "root", "xx20200808", "xx004", 3306);
 	}
 
 	void NetServer::Start(int port)
@@ -72,6 +76,15 @@ namespace Net
 		m_Port = port;
 		LuaWrap::GetLuaState();
 		::printf("NetServer::Start port:%d\n", port);
+
+		char *sql = "select * from tb_server where id = 10001";
+		auto_ptr<MySQLResult> result = m_MySQL->Query(sql);
+		if (result->GetRecord())
+		{
+			string id = result->GetString("ip");
+			int pt = result->GetInt("port");
+			printf("server id:10001 ip:%s port:%d\n", id.c_str(), pt);
+		}		
 	}
 
 	void NetServer::Stop()

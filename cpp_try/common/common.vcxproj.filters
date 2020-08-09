@@ -10,6 +10,9 @@
     <Filter Include="Config">
       <UniqueIdentifier>{d19ef2fa-eb97-4945-843a-55e70db47273}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MySQL">
+      <UniqueIdentifier>{136f3faf-8d25-4d14-bb0b-5aa7f4c8bbed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Macro.h" />
@@ -22,6 +25,12 @@
     <ClInclude Include="Config\LuaWrap.h">
       <Filter>Config</Filter>
     </ClInclude>
+    <ClInclude Include="MySQL\MySQLResult.h">
+      <Filter>MySQL</Filter>
+    </ClInclude>
+    <ClInclude Include="MySQL\MySQLWrap.h">
+      <Filter>MySQL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Net\NetServer.cpp">
@@ -32,6 +41,12 @@
     </ClCompile>
     <ClCompile Include="Config\LuaWrap.cpp">
       <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="MySQL\MySQLResult.cpp">
+      <Filter>MySQL</Filter>
+    </ClCompile>
+    <ClCompile Include="MySQL\MySQLWrap.cpp">
+      <Filter>MySQL</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

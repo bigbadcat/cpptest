@@ -11,6 +11,11 @@
 #ifndef __NetServer_h__
 #define __NetServer_h__
 
+namespace XX
+{
+	class MySQLWrap;
+}
+
 namespace Net
 {
 	//服务端网络管理。		
@@ -32,6 +37,9 @@ namespace Net
 	private:
 
 		int m_Port;
+
+		//MySQL
+		XX::MySQLWrap *m_MySQL;
 	};
 }
 

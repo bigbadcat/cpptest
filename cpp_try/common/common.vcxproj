@@ -21,11 +21,15 @@
   <ItemGroup>
     <ClInclude Include="Config\LuaWrap.h" />
     <ClInclude Include="Macro.h" />
+    <ClInclude Include="MySQL\MySQLResult.h" />
+    <ClInclude Include="MySQL\MySQLWrap.h" />
     <ClInclude Include="Net\NetServer.h" />
     <ClInclude Include="tinyxml2\tinyxml2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Config\LuaWrap.cpp" />
+    <ClCompile Include="MySQL\MySQLResult.cpp" />
+    <ClCompile Include="MySQL\MySQLWrap.cpp" />
     <ClCompile Include="Net\NetServer.cpp" />
     <ClCompile Include="tinyxml2\tinyxml2.cpp" />
   </ItemGroup>
@@ -81,8 +85,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\third_part\lua-5.3.4\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\third_part\lua-5.3.4\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\third_part\lua-5.3.4\include;..\third_part\MySQL5.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\third_part\lua-5.3.4\lib;..\third_part\MySQL5.5\lib;..\third_part\libevent-2.1.8\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -108,7 +112,7 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <Lib>
-      <AdditionalDependencies>lua5.3.4-Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>lua5.3.4-Debug.lib;libevent.lib;libevent_core.lib;libevent_extras.lib;libmysql.lib;mysqlclient.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

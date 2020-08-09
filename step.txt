@@ -3,7 +3,7 @@ try step:
 2.class -ok
 3.lib -ok
 4.xml -ok
-5.lua
+5.lua  -ok
 6.mysql
 7.net
 8.libevent
