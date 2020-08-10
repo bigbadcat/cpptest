@@ -7,4 +7,8 @@ try step:
 6.mysql -ok
 7.net
 8.libevent
-9.server start/stop
+9.server start/stop -ok
+
+
+ps aux|grep ./app1
+kill -9 xxxx
