@@ -1,8 +1,14 @@
 #include <iostream>
+#include <stdio.h>
 #include <Net/NetServer.h>
 #include "Module/ModuleA.h"
 #include "Module/ModuleB/ModuleB.h"
+#include <chrono>
+#include <thread>
 #include <csignal>
+#include <unistd.h>
+#include<sys/types.h>
+#include <sys/stat.h>
 
 #if defined(WIN)
 #include <WinSock2.h>
@@ -10,6 +16,7 @@
 
 using namespace Net;
 using namespace XX;
+using namespace std;
 
 bool is_run = false;
 
@@ -21,6 +28,34 @@ void OnSignal(int signum)
 
 int main()
 {
+
+	//1. 创建子进程，每个进程都会返回一个数字，父进程返回子进程的pid，子进程返回0
+	int ret_code = fork();
+	if (ret_code < 0)
+	{
+		return 1;
+	}
+	else if (ret_code>0)
+	{
+		//父进程退出
+		return 0;
+	}
+	
+	//2. 令子进程与父进程的会话组和进程组脱离，令子进程不受终端关闭影响
+	setsid();
+
+
+	//5. 设置进程的文件操作权限，使进程拥有最大权限
+	umask(0);
+	
+	//6. 将父进程打开的文件描述符关闭
+	//getdtablesize():获取描述符表的大小
+	for(int fd = 0;fd< getdtablesize();fd++)
+	{
+		close(fd);
+	}
+
+
 #if defined(WIN)
 	//初始化网络
 	WORD wVersionRequested;

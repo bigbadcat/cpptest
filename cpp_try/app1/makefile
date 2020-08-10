@@ -2,6 +2,7 @@
 
 TARGET = app1
 TARGET_PATH = ../../bin
+FLAGS = -std=c++11
 MACROS = -D NDEBUG
 
 INCLUDE = ../common
@@ -21,14 +22,14 @@ MAKE_OBJECT_DIR := $(shell mkdir -p $(OBJ_DIR) $(OBJ_PATH))
 
 $(TARGET_PATH)/$(TARGET) : $(OBJS) $(LIB_DEP) 
 	@echo "Linking... "
-	g++ -o $@ $(OBJS) $(INCLUDE_PATH) $(LIB_NAME) $(LIB_PATH)
+	g++ $(FLAGS) -o $@ $(OBJS) $(INCLUDE_PATH) $(LIB_NAME) $(LIB_PATH)
 
 $(OBJS) : $(OBJ_DIR)/%.o : %.cpp $(OBJ_DIR)/%.cpp.d
-	g++ -o $@ -c $< $(INCLUDE_PATH) $(MACROS)
+	g++ $(FLAGS) -o $@ -c $< $(INCLUDE_PATH) $(MACROS)
 
 DEPS = $(OBJS:.o=.cpp.d)
 $(DEPS) : $(OBJ_DIR)/%.cpp.d : %.cpp
-	g++ $< -MM $(INCLUDE_PATH) > $(OBJ_DIR)/$<.d
+	g++ $(FLAGS) $< -MM $(INCLUDE_PATH) > $(OBJ_DIR)/$<.d
 
 test:
 	@echo $(SRC_PATH)
