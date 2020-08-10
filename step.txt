@@ -3,8 +3,8 @@ try step:
 2.class -ok
 3.lib -ok
 4.xml -ok
-5.lua  -ok
-6.mysql
+5.lua -ok
+6.mysql -ok
 7.net
 8.libevent
 9.server start/stop

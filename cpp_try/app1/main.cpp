@@ -2,6 +2,7 @@
 #include <Net/NetServer.h>
 #include "Module/ModuleA.h"
 #include "Module/ModuleB/ModuleB.h"
+#include <csignal>
 
 #if defined(WIN)
 #include <WinSock2.h>
@@ -9,6 +10,14 @@
 
 using namespace Net;
 using namespace XX;
+
+bool is_run = false;
+
+void OnSignal(int signum)
+{
+	printf("OnSignal %d\n", signum);
+	is_run = false;
+}
 
 int main()
 {
@@ -37,11 +46,44 @@ int main()
 	ModuleB mb(10);
 	mb.Fun();
 
+	is_run = true;
+#if defined(WIN)
+	printf_s("input /q to quit ...\n");
+	char str[64];
+	while (is_run)
+	{
+		//接收命令
+		cin.getline(str, sizeof(str));
+
+		//如果输入内容超过缓冲区
+		if (!std::cin)
+		{
+			std::cin.clear(); // 清除错误标志位
+			std::cin.sync(); // 清除流
+		}
+
+		//提交命令
+		string cmd(str);
+		if (cmd.compare("/q") == 0)
+		{
+			is_run = false;
+		}
+	}
+#else
+	//linux下走信号退出
+	signal(SIGTERM, OnSignal);
+	signal(SIGINT, OnSignal);
+	std::chrono::milliseconds dura(200);
+	while (is_run)
+	{
+		std::this_thread::sleep_for(dura);
+	}
+#endif
+
 	net.Stop();
 
 #if defined(WIN)
 	::WSACleanup();
-	system("pause");
 #endif
 	return 0;
 }
