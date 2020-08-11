@@ -23,15 +23,31 @@
     <ClInclude Include="Macro.h" />
     <ClInclude Include="MySQL\MySQLResult.h" />
     <ClInclude Include="MySQL\MySQLWrap.h" />
+    <ClInclude Include="Net\NetConnection.h" />
+    <ClInclude Include="Net\NetDefine.h" />
+    <ClInclude Include="Net\NetListener.h" />
+    <ClInclude Include="Net\NetPackageHeader.h" />
     <ClInclude Include="Net\NetServer.h" />
     <ClInclude Include="tinyxml2\tinyxml2.h" />
+    <ClInclude Include="Util\ByteBuffer.h" />
+    <ClInclude Include="Util\DataUtil.h" />
+    <ClInclude Include="Util\LockQueue.h" />
+    <ClInclude Include="Util\StringUtil.h" />
+    <ClInclude Include="Util\TimeUtil.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Config\LuaWrap.cpp" />
     <ClCompile Include="MySQL\MySQLResult.cpp" />
     <ClCompile Include="MySQL\MySQLWrap.cpp" />
+    <ClCompile Include="Net\NetConnection.cpp" />
+    <ClCompile Include="Net\NetListener.cpp" />
+    <ClCompile Include="Net\NetPackageHeader.cpp" />
     <ClCompile Include="Net\NetServer.cpp" />
     <ClCompile Include="tinyxml2\tinyxml2.cpp" />
+    <ClCompile Include="Util\ByteBuffer.cpp" />
+    <ClCompile Include="Util\DataUtil.cpp" />
+    <ClCompile Include="Util\StringUtil.cpp" />
+    <ClCompile Include="Util\TimeUtil.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{92F82D68-2BFF-485D-80AF-ADF5C58ABEBC}</ProjectGuid>

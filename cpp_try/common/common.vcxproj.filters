@@ -13,6 +13,9 @@
     <Filter Include="MySQL">
       <UniqueIdentifier>{136f3faf-8d25-4d14-bb0b-5aa7f4c8bbed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{7f47bcff-9277-4755-893d-044492cc6c0a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Macro.h" />
@@ -31,6 +34,33 @@
     <ClInclude Include="MySQL\MySQLWrap.h">
       <Filter>MySQL</Filter>
     </ClInclude>
+    <ClInclude Include="Net\NetDefine.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\NetListener.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\NetPackageHeader.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\ByteBuffer.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\DataUtil.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\LockQueue.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\StringUtil.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\TimeUtil.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\NetConnection.h">
+      <Filter>Net</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Net\NetServer.cpp">
@@ -47,6 +77,27 @@
     </ClCompile>
     <ClCompile Include="MySQL\MySQLWrap.cpp">
       <Filter>MySQL</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\NetListener.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\NetPackageHeader.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\ByteBuffer.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\DataUtil.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\StringUtil.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\TimeUtil.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\NetConnection.cpp">
+      <Filter>Net</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

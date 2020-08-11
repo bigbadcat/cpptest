@@ -11,6 +11,10 @@
 #ifndef __NetServer_h__
 #define __NetServer_h__
 
+#include "NetDefine.h"
+#include <thread>
+using namespace std;
+
 namespace XX
 {
 	class MySQLWrap;
@@ -18,6 +22,8 @@ namespace XX
 
 namespace Net
 {
+	class NetListener;
+
 	//服务端网络管理。		
 	class NetServer
 	{
@@ -34,12 +40,28 @@ namespace Net
 		//停止服务
 		void Stop();
 
+		//添加连接
+		void AddConnection(socket_t s);
+
 	private:
+
+		//线程过程
+		void ThreadProcess();
 
 		int m_Port;
 
 		//MySQL
 		XX::MySQLWrap *m_MySQL;
+
+		//监听者
+		NetListener *m_pListener;
+
+		socket_t m_Socket;
+
+		//网络处理线程
+		thread m_Thread;
+
+		bool m_Run;
 	};
 }
 

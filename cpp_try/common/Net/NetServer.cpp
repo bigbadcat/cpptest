@@ -9,6 +9,7 @@
 *******************************************************/
 
 #include "NetServer.h"
+#include "NetListener.h"
 #include "../Macro.h"
 #include "../Config/LuaWrap.h"
 #include "../MySQL/MySQLWrap.h"
@@ -42,13 +43,17 @@ namespace Net
 		return string();
 	}
 
-	NetServer::NetServer() : m_Port(0), m_MySQL(new MySQLWrap())
+	NetServer::NetServer() : m_Port(0), m_MySQL(new MySQLWrap()), m_Socket(SOCKET_ERROR), m_Run(false), m_pListener(NULL)
 	{
+		m_pListener = new NetListener();
+		m_pListener->SetServer(this);
 	}
 
 	NetServer::~NetServer()
 	{
+		SAFE_DELETE(m_pListener);
 		SAFE_DELETE(m_MySQL);
+		SAFE_CLOSE_SOCKET(m_Socket);
 	}
 
 	void NetServer::Init()
@@ -84,12 +89,36 @@ namespace Net
 			string id = result->GetString("ip");
 			int pt = result->GetInt("port");
 			printf("server id:10001 ip:%s port:%d\n", id.c_str(), pt);
-		}		
+		}
+
+		m_Run = true;
+		m_Thread = thread([](NetServer *t){t->ThreadProcess(); }, this);
+	}
+
+	void NetServer::ThreadProcess()
+	{
+		std::chrono::milliseconds dura(200);
+		while (m_Run)
+		{
+			std::this_thread::sleep_for(dura);
+		}
 	}
 
 	void NetServer::Stop()
 	{
 		::printf("NetServer::Stop\n");
+		m_Run = false;
+		if (m_Thread.joinable())
+		{
+			m_Thread.join();
+		}
 		LuaWrap::ReleaseLua();
+	}
+
+	void NetServer::AddConnection(socket_t s)
+	{
+		SAFE_CLOSE_SOCKET(m_Socket);
+		m_Socket = s;
+		::printf("NetServer::AddConnection socket:%ld\n", (long)m_Socket);
 	}
 }

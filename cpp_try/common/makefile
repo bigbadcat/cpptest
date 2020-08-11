@@ -7,7 +7,7 @@ MACROS = -D NDEBUG
 INCLUDE = Net ../third_part/lua-5.3.4/include ../third_part/MySQL5.5/include
 INCLUDE_PATH = $(addprefix -I,$(INCLUDE))
 
-SRC = Net:tinyxml2:Config:MySQL
+SRC = Net:tinyxml2:Config:MySQL:Util
 SRC_PATH = $(wildcard *.cpp)
 SRC_PATH += $(foreach dir, $(subst :, ,$(SRC)), $(wildcard $(dir)/*.cpp))
 
