@@ -48,7 +48,7 @@ namespace Net
 		socket_t s = ::socket(AF_INET, SOCK_STREAM, 0);
 		if (s == SOCKET_ERROR)
 		{
-			cout << "create socket err:" << WSAGetLastError() << endl;
+			cout << "create socket err:" << GET_LAST_ERROR() << endl;
 			return SOCKET_ERROR;
 		}
 
@@ -61,7 +61,7 @@ namespace Net
 		int ret = ::bind(s, (const sockaddr *)&addr_in, sizeof(addr_in));
 		if (ret != 0)
 		{
-			cout << "bind socket err:" << WSAGetLastError() << endl;
+			cout << "bind socket err:" << GET_LAST_ERROR() << endl;
 			SAFE_CLOSE_SOCKET(s);
 			return SOCKET_ERROR;
 		}
@@ -70,18 +70,18 @@ namespace Net
 		ret = ::listen(s, 64);
 		if (ret != 0)
 		{
-			cout << "listen socket err:" << WSAGetLastError() << endl;
+			cout << "listen socket err:" << GET_LAST_ERROR() << endl;
 			SAFE_CLOSE_SOCKET(s);
 			return SOCKET_ERROR;
 		}
 
 		//非阻塞
-		bool noblocking = true;
-		u_long argp = noblocking ? 1 : 0;
-		ret = ::ioctlsocket(s, FIONBIO, &argp);
-		if (ret != 0)
+		//bool noblocking = true;
+		//u_long argp = noblocking ? 1 : 0;
+		//ret = ::ioctlsocket(s, FIONBIO, &argp);
+		if (!socket_set_nonblocking(s, true))
 		{
-			cout << "set listen socket noblocking err:" << WSAGetLastError() << endl;
+			cout << "set listen socket noblocking err:" << GET_LAST_ERROR() << endl;
 			SAFE_CLOSE_SOCKET(s);
 			return SOCKET_ERROR;
 		}
@@ -91,33 +91,30 @@ namespace Net
 	int NetListener::OnSocketRead()
 	{
 		sockaddr_in r_addr;
-		int addr_size = sizeof(r_addr);
+		socklen_t addr_size = sizeof(r_addr);
 		::memset(&r_addr, 0, sizeof(r_addr));
 		socket_t rs = ::accept(m_Socket, (sockaddr*)&r_addr, &addr_size);
 		if (rs == SOCKET_ERROR)
 		{
-			cout << "accept socket err:" << WSAGetLastError() << endl;
+			cout << "accept socket err:" << GET_LAST_ERROR() << endl;
 			return 1;
 		}
 
 		//非阻塞
-		bool noblocking = true;
-		u_long argp = noblocking ? 1 : 0;
-		int ret = ::ioctlsocket(rs, FIONBIO, &argp);
-		if (ret != 0)
+		if(!socket_set_nonblocking(rs, true))
 		{
-			cout << "set remote socket noblocking err:" << WSAGetLastError() << endl;
+			cout << "set remote socket noblocking err:" << GET_LAST_ERROR() << endl;
 			SAFE_CLOSE_SOCKET(rs);
 			return 2;
 		}
 
-		struct linger so_linger;
+		linger so_linger;
 		so_linger.l_onoff = 1;
 		so_linger.l_linger = 5;
-		ret = ::setsockopt(rs, SOL_SOCKET, SO_LINGER, (char*)&so_linger, sizeof so_linger);
+		int ret = ::setsockopt(rs, SOL_SOCKET, SO_LINGER, (char*)&so_linger, sizeof so_linger);
 		if (ret != 0)
 		{
-			cout << "setsockopt err:" << WSAGetLastError() << endl;
+			cout << "setsockopt err:" << GET_LAST_ERROR() << endl;
 			SAFE_CLOSE_SOCKET(rs);
 			return 3;
 		}

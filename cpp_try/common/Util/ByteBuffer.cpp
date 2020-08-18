@@ -10,6 +10,7 @@
 
 #include "ByteBuffer.h"
 #include <assert.h>
+#include <cstring>
 
 namespace XX
 {
@@ -33,7 +34,7 @@ namespace XX
 			return false;
 		}
 
-		::memcpy_s(m_pData + m_Length, m_Size - m_Length, data, len);
+		::memcpy(m_pData + m_Length, data, len);
 		m_Length += len;
 		return true;
 	}
@@ -41,7 +42,7 @@ namespace XX
 	void ByteBuffer::GetData(Byte* dst, int index, int len)
 	{
 		assert(index + len <= m_Length);		//保证有足够的数据
-		::memcpy_s(dst, len, m_pData + index, len);
+		::memcpy(dst, m_pData + index, len);
 	}
 
 	void ByteBuffer::RemoveData(int len)
@@ -51,7 +52,7 @@ namespace XX
 		if (m_Length > 0)
 		{
 			//剩余数据回移
-			::memcpy_s(m_pData, m_Size, m_pData + len, m_Length);
+			::memcpy(m_pData, m_pData + len, m_Length);
 		}		
 	}
 }
