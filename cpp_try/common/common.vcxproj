@@ -40,6 +40,7 @@
     <ClCompile Include="MySQL\MySQLResult.cpp" />
     <ClCompile Include="MySQL\MySQLWrap.cpp" />
     <ClCompile Include="Net\NetConnection.cpp" />
+    <ClCompile Include="Net\NetDefine.cpp" />
     <ClCompile Include="Net\NetListener.cpp" />
     <ClCompile Include="Net\NetPackageHeader.cpp" />
     <ClCompile Include="Net\NetServer.cpp" />

@@ -99,5 +99,8 @@
     <ClCompile Include="Net\NetConnection.cpp">
       <Filter>Net</Filter>
     </ClCompile>
+    <ClCompile Include="Net\NetDefine.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
