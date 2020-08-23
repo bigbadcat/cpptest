@@ -13,7 +13,9 @@
 #include "NetListener.h"
 #include "NetConnection.h"
 #include <assert.h>
+#if defined(WIN)
 #include <WS2tcpip.h>
+#endif
 #include <iostream>
 using namespace std;
 
@@ -29,6 +31,16 @@ namespace Net
 		SAFE_CLOSE_SOCKET(m_Send);
 	}
 
+int xx_inet_aton(const char *ip, struct in_addr *addr)
+	{
+#ifdef WIN
+		inet_pton(AF_INET, ip, &addr->S_un.S_addr);
+		return 0;		
+#else
+		return ::inet_aton(ip, addr);
+#endif
+	}
+
 	void NetAwakeBridge::Init(int port)
 	{
 		socket_t s = ::socket(AF_INET, SOCK_STREAM, 0);
@@ -38,22 +50,19 @@ namespace Net
 			return;
 		}
 
-		SOCKADDR_IN addrSrv;
-		int pton = inet_pton(AF_INET, "127.0.0.1", &addrSrv.sin_addr.S_un.S_addr);
-		addrSrv.sin_family = AF_INET;
-		addrSrv.sin_port = htons((u_short)port);
+		sockaddr_in addr = {0};
+		addr.sin_family = AF_INET;
+		addr.sin_port = htons(port);
+		xx_inet_aton("127.0.0.1", &addr.sin_addr);
 
 		//非阻塞
-		bool noblocking = true;
-		u_long argp = noblocking ? 1 : 0;
-		int ret = ::ioctlsocket(s, FIONBIO, &argp);
-		if (ret != 0)
+		if (!socket_set_nonblocking(s, true))
 		{
-			cout << "set socket noblocking err:" << GET_LAST_ERROR() << endl;
+			cout << "set listen socket noblocking err:" << GET_LAST_ERROR() << endl;
 			SAFE_CLOSE_SOCKET(s);
 			return;
 		}
-		::connect(s, (sockaddr *)&addrSrv, sizeof (sockaddr));
+		::connect(s, (sockaddr*)&addr, sizeof(addr));
 		m_Send = s;
 	}
 
@@ -234,7 +243,7 @@ namespace Net
 		assert(m_Connections.find(s) == m_Connections.end());
 		if (m_Connections.size() >= 60)		//Win下默认是能处理64个socket，一个Listener，三个预留
 		{
-			::printf_s("AddConnection failed\n");
+			::printf("AddConnection failed\n");
 			SAFE_CLOSE_SOCKET(s);
 			return;
 		}
