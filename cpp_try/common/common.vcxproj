@@ -24,6 +24,7 @@
     <ClInclude Include="MySQL\MySQLResult.h" />
     <ClInclude Include="MySQL\MySQLWrap.h" />
     <ClInclude Include="Net\NetConnection.h" />
+    <ClInclude Include="Net\NetConnectionManager.h" />
     <ClInclude Include="Net\NetDefine.h" />
     <ClInclude Include="Net\NetListener.h" />
     <ClInclude Include="Net\NetPackageHeader.h" />
@@ -40,6 +41,7 @@
     <ClCompile Include="MySQL\MySQLResult.cpp" />
     <ClCompile Include="MySQL\MySQLWrap.cpp" />
     <ClCompile Include="Net\NetConnection.cpp" />
+    <ClCompile Include="Net\NetConnectionManager.cpp" />
     <ClCompile Include="Net\NetDefine.cpp" />
     <ClCompile Include="Net\NetListener.cpp" />
     <ClCompile Include="Net\NetPackageHeader.cpp" />

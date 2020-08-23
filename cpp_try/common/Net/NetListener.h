@@ -15,7 +15,7 @@
 
 namespace Net
 {
-	class NetServer;
+	class NetConnectionManager;
 
 	//服务端的网络连接监听者		
 	class NetListener
@@ -32,11 +32,11 @@ namespace Net
 		//停止监听
 		void Stop();
 
-		//设置服务端
-		inline void SetServer(NetServer *p) { m_pServer = p; }
+		//设置连接管理
+		inline void SetManager(NetConnectionManager *p) { m_pManager = p; }
 
-		//获取服务端
-		inline NetServer* GetServer()const { return m_pServer; }
+		//获取连接管理
+		inline NetConnectionManager* GetManager()const { return m_pManager; }
 
 		//获取套接字
 		inline socket_t GetSocket()const { return m_Socket; }
@@ -58,8 +58,8 @@ namespace Net
 		//端口号。
 		int m_Port;
 
-		//网络服务端
-		NetServer *m_pServer;
+		//网络连接管理
+		NetConnectionManager *m_pManager;
 	};
 }
 

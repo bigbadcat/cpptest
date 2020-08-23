@@ -9,7 +9,7 @@
 *******************************************************/
 
 #include "NetListener.h"
-#include "NetServer.h"
+#include "NetConnectionManager.h"
 #include "NetDefine.h"
 #include <assert.h>
 #include <iostream>
@@ -17,7 +17,7 @@ using namespace std;
 
 namespace Net
 {
-	NetListener::NetListener(): m_Socket(SOCKET_ERROR), m_Port(0), m_pServer(NULL)
+	NetListener::NetListener(): m_Socket(SOCKET_ERROR), m_Port(0), m_pManager(NULL)
 	{
 	}
 
@@ -76,9 +76,6 @@ namespace Net
 		}
 
 		//非阻塞
-		//bool noblocking = true;
-		//u_long argp = noblocking ? 1 : 0;
-		//ret = ::ioctlsocket(s, FIONBIO, &argp);
 		if (!socket_set_nonblocking(s, true))
 		{
 			cout << "set listen socket noblocking err:" << GET_LAST_ERROR() << endl;
@@ -119,9 +116,9 @@ namespace Net
 			return 3;
 		}
 
-		if (m_pServer != NULL)
+		if (m_pManager != NULL)
 		{
-			m_pServer->AddConnection(rs);
+			m_pManager->AddConnection(rs);
 		}
 
 		return 0;

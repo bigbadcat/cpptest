@@ -61,6 +61,9 @@
     <ClInclude Include="Net\NetConnection.h">
       <Filter>Net</Filter>
     </ClInclude>
+    <ClInclude Include="Net\NetConnectionManager.h">
+      <Filter>Net</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Net\NetServer.cpp">
@@ -100,6 +103,9 @@
       <Filter>Net</Filter>
     </ClCompile>
     <ClCompile Include="Net\NetDefine.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Net\NetConnectionManager.cpp">
       <Filter>Net</Filter>
     </ClCompile>
   </ItemGroup>

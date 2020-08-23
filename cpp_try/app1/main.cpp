@@ -139,6 +139,7 @@ int main()
 	net.Stop();
 
 #if defined(WIN)
+	system("pause");
 	::WSACleanup();
 #endif
 	return 0;

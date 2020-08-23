@@ -9,11 +9,13 @@
 *******************************************************/
 
 #include "NetServer.h"
-#include "NetListener.h"
+#include "NetConnection.h"
+#include "NetConnectionManager.h"
 #include "../Macro.h"
 #include "../Config/LuaWrap.h"
 #include "../MySQL/MySQLWrap.h"
 #include "../tinyxml2/tinyxml2.h"
+#include "../Util/DataUtil.h"
 #include <iostream>
 #include <string>
 #include <stdio.h>
@@ -43,17 +45,16 @@ namespace Net
 		return string();
 	}
 
-	NetServer::NetServer() : m_Port(0), m_MySQL(new MySQLWrap()), m_Socket(SOCKET_ERROR), m_Run(false), m_pListener(NULL)
+	NetServer::NetServer() : m_Port(0), m_MySQL(new MySQLWrap()), m_Run(false), m_pConnectionManager(NULL)
 	{
-		m_pListener = new NetListener();
-		m_pListener->SetServer(this);
+		m_pConnectionManager = new NetConnectionManager();
+		m_pConnectionManager->SetServer(this);
 	}
 
 	NetServer::~NetServer()
 	{
-		SAFE_DELETE(m_pListener);
+		SAFE_DELETE(m_pConnectionManager);
 		SAFE_DELETE(m_MySQL);
-		SAFE_CLOSE_SOCKET(m_Socket);
 	}
 
 	void NetServer::Init()
@@ -88,6 +89,7 @@ namespace Net
 		{
 			string id = result->GetString("ip");
 			int pt = result->GetInt("port");
+			m_Port = pt;
 			printf("server id:10001 ip:%s port:%d\n", id.c_str(), pt);
 		}
 
@@ -97,11 +99,17 @@ namespace Net
 
 	void NetServer::ThreadProcess()
 	{
+		m_pConnectionManager->Init(m_Port);
+
 		std::chrono::milliseconds dura(200);
 		while (m_Run)
 		{
-			std::this_thread::sleep_for(dura);
+			m_pConnectionManager->SelectSocket(200);
+			//std::this_thread::sleep_for(dura);
 		}
+		cout << "m_Run:" << m_Run << endl;
+
+		m_pConnectionManager->Release();
 	}
 
 	void NetServer::Stop()
@@ -115,10 +123,29 @@ namespace Net
 		LuaWrap::ReleaseLua();
 	}
 
-	void NetServer::AddConnection(socket_t s)
+	void NetServer::OnRecvData(NetConnection* con)
 	{
-		SAFE_CLOSE_SOCKET(m_Socket);
-		m_Socket = s;
-		::printf("NetServer::AddConnection socket:%ld\n", (long)m_Socket);
+		static Byte buffer[NET_PACKAGE_MAX_SIZE];
+		NetPackageHeader header;
+		assert(con != NULL);
+		con->TakeRecvPackage(header, buffer, NET_PACKAGE_MAX_SIZE);
+
+		//::printf("NetServer::OnRecvData con:%I64d cmd:%d\n", con->GetUniqueID(), header.Command);
+		if (header.Command == 3)		//心跳请求
+		{
+
+		}
+		else if(header.Command == 1001)		//用户登陆请求
+		{
+			int index = 0;
+			string token = DataUtil::ReadString(buffer, index, &index);
+			printf("login token:%s\n", token.c_str());
+
+			int res_index = 0;
+			Byte res_buffer[NET_PACKAGE_MAX_SIZE];
+			res_index = DataUtil::WriteInt32(res_buffer, res_index, 0);
+			res_index = DataUtil::WriteInt32(res_buffer, res_index, 0);
+			con->Send(0, 1401, res_buffer, res_index);
+		}
 	}
 }

@@ -23,6 +23,8 @@ namespace XX
 namespace Net
 {
 	class NetListener;
+	class NetConnection;
+	class NetConnectionManager;
 
 	//服务端网络管理。		
 	class NetServer
@@ -40,8 +42,8 @@ namespace Net
 		//停止服务
 		void Stop();
 
-		//添加连接
-		void AddConnection(socket_t s);
+		//有连接接收到数据包
+		void OnRecvData(NetConnection* con);
 
 	private:
 
@@ -53,10 +55,8 @@ namespace Net
 		//MySQL
 		XX::MySQLWrap *m_MySQL;
 
-		//监听者
-		NetListener *m_pListener;
-
-		socket_t m_Socket;
+		//连接管理
+		NetConnectionManager *m_pConnectionManager;
 
 		//网络处理线程
 		thread m_Thread;
