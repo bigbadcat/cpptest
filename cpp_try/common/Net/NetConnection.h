@@ -20,6 +20,8 @@ using namespace XX;
 
 namespace Net
 {
+	class NetConnectionManager;
+
 	//网络连接对象
 	class NetConnection
 	{
@@ -79,7 +81,16 @@ namespace Net
 		//进行发送操作
 		int DoSend();
 
+		//设置连接管理
+		inline void SetManager(NetConnectionManager *p) { m_BelongManager = p; }
+
+		//获取连接管理
+		inline NetConnectionManager* GetManager()const { return m_BelongManager; }
+
 	private:
+
+		//所属管理者
+		NetConnectionManager *m_BelongManager;
 
 		//Socket句柄，连接唯一标识
 		socket_t m_Socket;

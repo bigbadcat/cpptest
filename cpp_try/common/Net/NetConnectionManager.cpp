@@ -136,12 +136,23 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 
 	NetConnectionManager::NetConnectionManager(): m_pServer(NULL), m_pListener(NULL)
 	{
+#ifndef WIN
+		m_EpollFD = ::epoll_create(1);
+		m_Events = (epoll_event *)malloc(sizeof(epoll_event) * 1);
+#endif
+
 		m_pListener = new NetListener();
 		m_pListener->SetManager(this);
 	}
 
 	NetConnectionManager::~NetConnectionManager()
 	{
+#ifndef WIN
+		::close(m_EpollFD);
+		m_EpollFD = 0;
+		free(m_Events);
+		m_Events = NULL;
+#endif
 		Release();
 		SAFE_DELETE(m_pListener)
 	}
@@ -150,6 +161,17 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 	{
 		m_pListener->Start(port);
 		m_AwakeBridge.Init(port);
+
+#ifndef WIN
+		socket_t s = m_pListener->GetSocket();
+		epoll_event ev;
+		ev.events = EPOLLIN | EPOLLERR;		//EPOLLOUT监听socket不需要
+		ev.data.ptr = pcon;
+		if (::epoll_ctl(m_EpollFD, EPOLL_CTL_ADD, s, &ev) != 0)
+		{
+			printf("epoll_ctl err:%d\n", GET_LAST_ERROR());
+		}
+#endif
 	}
 
 	void NetConnectionManager::Release()
@@ -159,6 +181,70 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 	}
 
 	void NetConnectionManager::SelectSocket(int msec)
+	{
+#ifdef  WIN
+		SelectSocketWin(msec);
+#else
+		SelectSocketLinux(msec);
+#endif
+	}
+
+	void NetConnectionManager::AddConnection(socket_t s)
+	{
+#ifdef WIN
+		assert(m_Connections.find(s) == m_Connections.end());
+		if (m_Connections.size() >= 60)		//Win下默认是能处理64个socket，一个Listener，三个预留
+		{
+			::printf("AddConnection failed\n");
+			SAFE_CLOSE_SOCKET(s);
+			return;
+		}
+#endif
+
+		NetConnection *pcon = new NetConnection();
+		pcon->SetSocket(s);
+		m_Connections.insert(NetConnectionMap::value_type(s, pcon));
+
+#ifndef WIN
+		epoll_event ev;
+		ev.events = EPOLLIN | EPOLLERR | EPOLLPRI;		//EPOLLOUT不在添加连接时加入
+		ev.data.ptr = pcon;
+		if (::epoll_ctl(m_EpollFD, EPOLL_CTL_ADD, s, &ev) != 0)
+		{
+			printf("epoll_ctl err:%d\n", GET_LAST_ERROR());
+		}
+#endif
+	}
+
+	void NetConnectionManager::RemoveConnection(NetConnection* con)
+	{
+		assert(con != NULL);
+		socket_t s = con->GetSocket();
+		OnSocketClose(con->GetSocket());
+	}
+
+	void NetConnectionManager::OnRecvPackage(NetConnection *con)
+	{
+		assert(con != NULL && m_pServer != NULL);
+		m_pServer->OnRecvData(con);
+	}
+
+	void NetConnectionManager::UpdateConnectionSend(NetConnection* con)
+	{
+#ifndef WIN
+		static __uint32_t need_write = EPOLLIN | EPOLLOUT | EPOLLERR;
+		static __uint32_t no_write = EPOLLIN | EPOLLERR;
+		epoll_event ev;
+		ev.events = con->IsNeedWrite() ? need_write : no_write;		//根据是否需要写入来设置不同事件
+		ev.data.ptr = pcon;
+		if (::epoll_ctl(m_EpollFD, EPOLL_CTL_MOD, s, &ev) != 0)
+		{
+			printf("epoll_ctl err:%d\n", GET_LAST_ERROR());
+		}
+#endif
+	}
+
+	void NetConnectionManager::SelectSocketWin(int msec)
 	{
 		//准备文件集合
 		fd_set readfds;
@@ -189,7 +275,7 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 		timeval timeout;
 		timeout.tv_sec = msec / 1000;				//秒
 		timeout.tv_usec = (msec % 1000) * 1000;		//毫秒=1000微秒
-		int ret = ::select(max_fd+1, &readfds, &writefds, &exceptfds, &timeout);		//windows下nfds参数无用，可传入0
+		int ret = ::select(max_fd + 1, &readfds, &writefds, &exceptfds, &timeout);		//windows下nfds参数无用，可传入0
 		if (ret > 0)
 		{
 			vector<socket_t> needremove;
@@ -238,33 +324,49 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 		}
 	}
 
-	void NetConnectionManager::AddConnection(socket_t s)
+#ifndef WIN
+	void NetConnectionManager::SelectSocketLinux(int msec)
 	{
-		assert(m_Connections.find(s) == m_Connections.end());
-		if (m_Connections.size() >= 60)		//Win下默认是能处理64个socket，一个Listener，三个预留
+		int ret = ::epoll_wait(m_EpollFD, m_Events, 1, msec);
+		if (ret < 0)
 		{
-			::printf("AddConnection failed\n");
-			SAFE_CLOSE_SOCKET(s);
+			cout << "epoll_wait err:" << GET_LAST_ERROR() << endl;
 			return;
 		}
 
-		NetConnection *pcon = new NetConnection();
-		pcon->SetSocket(s);
-		m_Connections.insert(NetConnectionMap::value_type(s, pcon));
-	}
+		vector<socket_t> needremove;
+		for (int i = 0; i < ret; i++)
+		{
+			epoll_event & ev = m_Events[i];
+			socket_t s = ev.data.fd;
+			uint32_t e = ev.events;
 
-	void NetConnectionManager::RemoveConnection(NetConnection* con)
-	{
-		assert(con != NULL);
-		socket_t s = con->GetSocket();
-		OnSocketClose(con->GetSocket());
-	}
+			if (e & EPOLLERR)
+			{
+				needremove.push_back(s);
+				continue;
+			}
 
-	void NetConnectionManager::OnRecvPackage(NetConnection *con)
-	{
-		assert(con != NULL && m_pServer != NULL);
-		m_pServer->OnRecvData(con);
+			if (e & EPOLLIN && OnSocketRead(s) != 0)
+			{
+				needremove.push_back(s);
+				continue;
+			}
+
+			if (e & EPOLLOUT && OnSocketWrite(s) != 0)
+			{
+				needremove.push_back(s);
+				continue;
+			}
+		}
+
+		//移除错误的SOKECT
+		for (vector<socket_t>::iterator itr = needremove.begin(); itr != needremove.end(); ++itr)
+		{
+			OnSocketClose(*itr);
+		}
 	}
+#endif
 
 	NetConnection* NetConnectionManager::GetConnectionFromSocket(socket_t s)const
 	{
@@ -337,6 +439,9 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 
 	void NetConnectionManager::OnSocketClose(socket_t s)
 	{
+#ifndef WIN
+		::epoll_ctl(m_EpollFD, EPOLL_CTL_DEL, s, NULL);
+#endif
 		if (s == m_pListener->GetSocket())
 		{
 			m_pListener->OnSocketClose();

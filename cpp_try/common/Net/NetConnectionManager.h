@@ -81,7 +81,18 @@ namespace Net
 		//通知唤醒
 		void NotifyAwake() { m_AwakeBridge.Notify(); }
 
+		//更新发送状态
+		void UpdateConnectionSend(NetConnection* con);
+
 	private:
+
+#ifdef  WIN
+		//选择Socket处理
+		void SelectSocketWin(int msec);
+#else
+		//选择Socket处理
+		void SelectSocketLinux(int msec);
+#endif
 
 		//获取连接
 		NetConnection* GetConnectionFromSocket(socket_t s)const;
@@ -106,6 +117,12 @@ namespace Net
 
 		//连接集合
 		NetConnectionMap m_Connections;
+
+#ifndef WIN
+		int m_EpollFD;
+		epoll_event *m_Events;
+#endif
+
 	};
 }
 
