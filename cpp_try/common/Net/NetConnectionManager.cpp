@@ -138,7 +138,7 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 	{
 #ifndef WIN
 		m_EpollFD = ::epoll_create(1);
-		m_Events = (epoll_event *)malloc(sizeof(epoll_event) * 1);
+		m_Events = (epoll_event *)malloc(sizeof(epoll_event) * 10);
 #endif
 
 		m_pListener = new NetListener();
@@ -166,7 +166,7 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 		socket_t s = m_pListener->GetSocket();
 		epoll_event ev;
 		ev.events = EPOLLIN | EPOLLERR;		//EPOLLOUT监听socket不需要
-		ev.data.ptr = pcon;
+		ev.data.ptr = NULL;
 		if (::epoll_ctl(m_EpollFD, EPOLL_CTL_ADD, s, &ev) != 0)
 		{
 			printf("epoll_ctl err:%d\n", GET_LAST_ERROR());
@@ -234,9 +234,10 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 #ifndef WIN
 		static __uint32_t need_write = EPOLLIN | EPOLLOUT | EPOLLERR;
 		static __uint32_t no_write = EPOLLIN | EPOLLERR;
+		socket_t s = con->GetSocket();
 		epoll_event ev;
 		ev.events = con->IsNeedWrite() ? need_write : no_write;		//根据是否需要写入来设置不同事件
-		ev.data.ptr = pcon;
+		ev.data.ptr = NULL;
 		if (::epoll_ctl(m_EpollFD, EPOLL_CTL_MOD, s, &ev) != 0)
 		{
 			printf("epoll_ctl err:%d\n", GET_LAST_ERROR());
@@ -244,6 +245,7 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 #endif
 	}
 
+#ifdef WIN
 	void NetConnectionManager::SelectSocketWin(int msec)
 	{
 		//准备文件集合
@@ -323,11 +325,12 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 			cout << "select socket err:" << GET_LAST_ERROR() << endl;
 		}
 	}
+#endif
 
 #ifndef WIN
 	void NetConnectionManager::SelectSocketLinux(int msec)
 	{
-		int ret = ::epoll_wait(m_EpollFD, m_Events, 1, msec);
+		int ret = ::epoll_wait(m_EpollFD, m_Events, 10, msec);
 		if (ret < 0)
 		{
 			cout << "epoll_wait err:" << GET_LAST_ERROR() << endl;
