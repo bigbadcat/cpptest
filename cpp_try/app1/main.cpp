@@ -91,53 +91,53 @@ int main()
 	}
 
 #endif
+	{
+		NetServer net;
+		net.Init();
+		net.Start(30);
 
-	NetServer net;
-	net.Init();
-	net.Start(30);
+		ModuleA ma(2);
+		ma.Fun();
 
-	ModuleA ma(2);
-	ma.Fun();
+		ModuleB mb(10);
+		mb.Fun();
 
-	ModuleB mb(10);
-	mb.Fun();
-
-	is_run = true;
+		is_run = true;
 #if defined(WIN)
-	printf_s("input /q to quit ...\n");
-	char str[64];
-	while (is_run)
-	{
-		//接收命令
-		cin.getline(str, sizeof(str));
-
-		//如果输入内容超过缓冲区
-		if (!std::cin)
+		printf_s("input /q to quit ...\n");
+		char str[64];
+		while (is_run)
 		{
-			std::cin.clear(); // 清除错误标志位
-			std::cin.sync(); // 清除流
-		}
+			//接收命令
+			cin.getline(str, sizeof(str));
 
-		//提交命令
-		string cmd(str);
-		if (cmd.compare("/q") == 0)
-		{
-			is_run = false;
+			//如果输入内容超过缓冲区
+			if (!std::cin)
+			{
+				std::cin.clear(); // 清除错误标志位
+				std::cin.sync(); // 清除流
+			}
+
+			//提交命令
+			string cmd(str);
+			if (cmd.compare("/q") == 0)
+			{
+				is_run = false;
+			}
 		}
-	}
 #else
-	//linux下走信号退出
-	signal(SIGTERM, OnSignal);
-	signal(SIGINT, OnSignal);
-	std::chrono::milliseconds dura(200);
-	while (is_run)
-	{
-		std::this_thread::sleep_for(dura);
-	}
+		//linux下走信号退出
+		signal(SIGTERM, OnSignal);
+		signal(SIGINT, OnSignal);
+		std::chrono::milliseconds dura(200);
+		while (is_run)
+		{
+			std::this_thread::sleep_for(dura);
+		}
 #endif
 
-	net.Stop();
-
+		net.Stop();
+	}
 #if defined(WIN)
 	system("pause");
 	::WSACleanup();
