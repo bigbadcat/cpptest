@@ -166,7 +166,7 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 		socket_t s = m_pListener->GetSocket();
 		epoll_event ev;
 		ev.events = EPOLLIN | EPOLLERR;		//EPOLLOUT监听socket不需要
-		ev.data.ptr = NULL;
+		ev.data.fd = s;
 		if (::epoll_ctl(m_EpollFD, EPOLL_CTL_ADD, s, &ev) != 0)
 		{
 			printf("epoll_ctl err:%d\n", GET_LAST_ERROR());
@@ -203,12 +203,13 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 
 		NetConnection *pcon = new NetConnection();
 		pcon->SetSocket(s);
+		pcon->SetManager(this);
 		m_Connections.insert(NetConnectionMap::value_type(s, pcon));
 
 #ifndef WIN
 		epoll_event ev;
 		ev.events = EPOLLIN | EPOLLERR | EPOLLPRI;		//EPOLLOUT不在添加连接时加入
-		ev.data.ptr = pcon;
+		ev.data.fd = s;
 		if (::epoll_ctl(m_EpollFD, EPOLL_CTL_ADD, s, &ev) != 0)
 		{
 			printf("epoll_ctl err:%d\n", GET_LAST_ERROR());
@@ -237,7 +238,7 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 		socket_t s = con->GetSocket();
 		epoll_event ev;
 		ev.events = con->IsNeedWrite() ? need_write : no_write;		//根据是否需要写入来设置不同事件
-		ev.data.ptr = NULL;
+		ev.data.fd = s;
 		if (::epoll_ctl(m_EpollFD, EPOLL_CTL_MOD, s, &ev) != 0)
 		{
 			printf("epoll_ctl err:%d\n", GET_LAST_ERROR());
@@ -343,7 +344,6 @@ int xx_inet_aton(const char *ip, struct in_addr *addr)
 			epoll_event & ev = m_Events[i];
 			socket_t s = ev.data.fd;
 			uint32_t e = ev.events;
-
 			if (e & EPOLLERR)
 			{
 				needremove.push_back(s);
