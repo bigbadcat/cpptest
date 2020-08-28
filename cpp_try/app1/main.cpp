@@ -66,10 +66,10 @@ void start_daemon()
 
 	//6. 将父进程打开的文件描述符关闭
 	//getdtablesize():获取描述符表的大小
-	for (int fd = 0; fd< getdtablesize(); fd++)
-	{
-		close(fd);
-	}
+	//for (int fd = 0; fd< getdtablesize(); fd++)
+	//{
+	//	close(fd);
+	//}
 #endif
 }
 
