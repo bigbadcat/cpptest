@@ -5,7 +5,7 @@ try step:
 4.xml -ok
 5.lua -ok
 6.mysql -ok
-7.net
+7.net/epoll -ok
 8.libevent
 9.server start/stop -ok
 

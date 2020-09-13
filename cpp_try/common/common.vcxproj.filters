@@ -16,6 +16,9 @@
     <Filter Include="Util">
       <UniqueIdentifier>{7f47bcff-9277-4755-893d-044492cc6c0a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Http">
+      <UniqueIdentifier>{68197aff-f017-42a1-b547-d17b62bebf06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Macro.h" />
@@ -64,6 +67,9 @@
     <ClInclude Include="Net\NetConnectionManager.h">
       <Filter>Net</Filter>
     </ClInclude>
+    <ClInclude Include="Http\HttpServer.h">
+      <Filter>Http</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Net\NetServer.cpp">
@@ -107,6 +113,9 @@
     </ClCompile>
     <ClCompile Include="Net\NetConnectionManager.cpp">
       <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Http\HttpServer.cpp">
+      <Filter>Http</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -151,12 +151,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="HttpTest.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Module\ModuleA.cpp" />
     <ClCompile Include="Module\ModuleB\ModuleB.cpp" />
     <ClCompile Include="Util\DataUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HttpTest.h" />
     <ClInclude Include="Module\ModuleA.h" />
     <ClInclude Include="Module\ModuleB\ModuleB.h" />
     <ClInclude Include="Util\DataUtil.h" />

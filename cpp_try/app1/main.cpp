@@ -3,6 +3,7 @@
 #include <Net/NetServer.h>
 #include "Module/ModuleA.h"
 #include "Module/ModuleB/ModuleB.h"
+#include "HttpTest.h"
 #include <chrono>
 #include <thread>
 #include <csignal>
@@ -92,15 +93,18 @@ int main()
 
 #endif
 	{
-		NetServer net;
-		net.Init();
-		net.Start(30);
+		//NetServer net;
+		//net.Init();
+		//net.Start(30);
 
-		ModuleA ma(2);
-		ma.Fun();
+		//ModuleA ma(2);
+		//ma.Fun();
 
-		ModuleB mb(10);
-		mb.Fun();
+		//ModuleB mb(10);
+		//mb.Fun();
+
+		XX::HttpTest http;
+		http.Start(8081);
 
 		is_run = true;
 #if defined(WIN)
@@ -136,7 +140,8 @@ int main()
 		}
 #endif
 
-		net.Stop();
+		//net.Stop();
+		http.Stop();
 	}
 #if defined(WIN)
 	system("pause");

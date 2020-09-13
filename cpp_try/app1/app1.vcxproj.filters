@@ -11,6 +11,7 @@
     <ClCompile Include="Util\DataUtil.cpp">
       <Filter>Util</Filter>
     </ClCompile>
+    <ClCompile Include="HttpTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Module">
@@ -33,5 +34,6 @@
     <ClInclude Include="Util\DataUtil.h">
       <Filter>Util</Filter>
     </ClInclude>
+    <ClInclude Include="HttpTest.h" />
   </ItemGroup>
 </Project>
