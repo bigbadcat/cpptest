@@ -7,7 +7,7 @@ MACROS = -D NDEBUG
 
 INCLUDE = ../common
 INCLUDE_PATH = $(addprefix -I,$(INCLUDE))
-LIB_NAME = -lcommon -llua -ldl -lmysqlclient -lpthread
+LIB_NAME = -lcommon -llua -ldl -lmysqlclient -lpthread -levent
 LIB_PATH = -L../common -L/usr/lib64/mysql
 LIB_DEP = ../common/libcommon.a
 

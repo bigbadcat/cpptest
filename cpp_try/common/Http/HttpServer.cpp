@@ -217,7 +217,7 @@ namespace XX
 		printf("Using Libevent with backend method <%s>.\n", event_base_get_method(m_EventBase));	//获取当前使用了哪种I/O模型，Windows下仅显示win32
 		
 		//启动服务
-		char *http_addr = "0.0.0.0";
+		const char *http_addr = "0.0.0.0";
 		struct evhttp *http_server = evhttp_new(m_EventBase);
 		evhttp_bind_socket(http_server, http_addr, m_Port);
 		evhttp_set_gencb(http_server, HttpServer::OnHttpRequest, this);

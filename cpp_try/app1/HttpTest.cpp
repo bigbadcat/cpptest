@@ -33,7 +33,7 @@ namespace XX
 	void HttpTest::OnTestRequest(const string &path, HttpParamMap &params, HttpResponse &res)
 	{
 		string p = params["p"];
-		printf_s("OnTestRequest cmd:%s p:%s\n", path.c_str(), p.c_str());
+		printf("OnTestRequest cmd:%s p:%s\n", path.c_str(), p.c_str());
 
 		Int64 time = TimeUtil::GetCurrentSecond();
 		res.BeginLuaTable();
